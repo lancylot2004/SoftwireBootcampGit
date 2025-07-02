@@ -1,12 +1,17 @@
 package com.gitTraining
 
-fun computeFibbonaciNumber(position: Int): Int {
+fun computeFibbonaciNumber(position: Int?): Int {
+    var position = position
+    if (position == null) {
+        position = 1
+    }
+
     if (position == 0) return 0
     if (position < 0) {
         return computeNegativeFibbonachi(position)
     }
 
-    if (position == 1 || position == 2) return 1
+    if (position <= 2) return 1
 
     var smallFibbonachiNumber = 1
     var largeFibbonachiNumber = 1
