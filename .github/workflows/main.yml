@@ -1,11 +1,7 @@
 name: Lint & Test All Commits
+on: push
 
-# In this case, we specifically want to execute the pipeline on
-# *every single* commit.
-on:
-  push:
-    tags:
-      - "commit/*"
+# Hey, if you're reading this, why not add caching (for literally no reason)??
 
 jobs:
   lint:
@@ -29,5 +25,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: "Setup Java"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '24'
+
       - name: "Run Tests"
         run: ./gradlew test
