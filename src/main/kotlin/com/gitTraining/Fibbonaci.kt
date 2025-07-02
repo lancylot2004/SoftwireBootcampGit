@@ -1,31 +1,43 @@
 package com.gitTraining
 
-fun computeFibbonaciNumber(position: Int?, recursion: Boolean = false): Int {
-    var position = position
-    if (position == null) {
-        position = 1
-    }
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 
-    if (recursion) return recursiveFibbonachi(position)
+fun computeFibbonaciNumber(position: Int?, recursion: Boolean = false): Int {
+    val position = position ?: 1
 
     if (position == 0) return 0
-    if (position < 0) {
-        return computeNegativeFibbonachi(position)
+
+    if (recursion) {
+        return when (position.absoluteValue) {
+            1 -> 1
+            2 -> position.sign
+            else -> recursiveFibbonachi(
+                previous = 1,
+                current = position.sign,
+                stepsLeft = position - 2 * position.sign
+            )
+        }
     }
 
-    if (position <= 2) return 1
+    return when (position) {
+        in Int.MIN_VALUE..<0 -> computeNegativeFibbonachi(position)
+        1, 2 -> 1
+        else -> {
+            var smallFibbonachiNumber = 1
+            var largeFibbonachiNumber = 1
 
-    var smallFibbonachiNumber = 1
-    var largeFibbonachiNumber = 1
+            var currentPosition = 2
+            while (currentPosition < position) {
+                val nextFibbonachiNumber = smallFibbonachiNumber + largeFibbonachiNumber
+                smallFibbonachiNumber = largeFibbonachiNumber
+                largeFibbonachiNumber = nextFibbonachiNumber
+                currentPosition ++
+            }
 
-    var currentPosition = 2
-    while (currentPosition < position) {
-        val nextFibbonachiNumber = smallFibbonachiNumber + largeFibbonachiNumber
-        smallFibbonachiNumber = largeFibbonachiNumber
-        largeFibbonachiNumber = nextFibbonachiNumber
-        currentPosition ++
+            largeFibbonachiNumber
+        }
     }
-    return largeFibbonachiNumber
 }
 
 fun computeFibbonachiArray(start: Int, end: Int, efficient: Boolean = false): List<Int> {
@@ -44,12 +56,12 @@ fun computeNegativeFibbonachi(position:Int): Int {
     return if (resultIsNegative) (absoluteResult * -1) else absoluteResult
 }
 
-fun recursiveFibbonachi(initialPosition: Int, left: Int = 0, right: Int = 1, position: Int = initialPosition): Int {
-    if (initialPosition == 0) return 0
-    if (position == 0) return left
-    if (initialPosition > 0) {
-        return recursiveFibbonachi(initialPosition, right, left + right, position - 1)
-    } else {
-        return recursiveFibbonachi(initialPosition, right - left, left, position + 1)
+fun recursiveFibbonachi(previous: Int, current: Int, stepsLeft: Int): Int {
+    return when (stepsLeft) {
+        0 -> current
+        else -> {
+            val newCurrent = previous + current * stepsLeft.sign
+            recursiveFibbonachi(current, newCurrent, stepsLeft - stepsLeft.sign)
+        }
     }
 }
