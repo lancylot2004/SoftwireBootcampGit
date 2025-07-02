@@ -1,5 +1,8 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.9.10'
+    id 'org.jetbrains.kotlin.jvm' version '2.2.0'
 }
 
 version '1.0.0'
@@ -9,16 +12,15 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10'
-    testImplementation 'junit:junit:4.12'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.2.0'
+    testImplementation 'junit:junit:4.13.1'
     testImplementation "org.assertj:assertj-core:3.8.0"
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = '17'
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = '17'
+tasks.withType(KotlinJvmCompile).configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_24)
+    }
 }
 
 apply plugin: 'jacoco'
@@ -32,12 +34,12 @@ jacocoTestReport {
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17)) // Align Kotlin JVM target with Java 21
+        languageVersion.set(JavaLanguageVersion.of(24))
     }
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17)) // Ensure Java toolchain is also set to 21
+        languageVersion.set(JavaLanguageVersion.of(24))
     }
 }
