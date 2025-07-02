@@ -1,0 +1,4 @@
+#!/bin/zsh
+# This file should be placed in ".git/hooks".
+
+./gradlew test
