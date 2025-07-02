@@ -11,7 +11,7 @@ fun computeFibbonaciNumber(position: Int): Int {
         val temp = i
         i = j
         j += temp
-        currentPosition ++
+        currentPosition++
     }
     return j
 }
