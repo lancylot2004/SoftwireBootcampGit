@@ -1,0 +1,33 @@
+name: Lint & Test All Commits
+
+# In this case, we specifically want to execute the pipeline on
+# *every single* commit.
+on:
+  push:
+    tags:
+      - "commit/*"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: "Install ktlint"
+        uses: nbadal/action-ktlint-setup@v1
+        with:
+          ktlint_version: '1.6.0'
+
+      - name: "Run Lint"
+        run: ./gradlew ktlintCheck
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Run Tests"
+        run: ./gradlew test
