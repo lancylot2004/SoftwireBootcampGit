@@ -21,3 +21,12 @@ fun computeFibbonaciNumber(position: Int): Int {
     }
     return largeFibbonachiNumber
 }
+
+fun computeFibbonachiArray(start: Int, end: Int, efficient: Boolean = false): List<Int> {
+    if (!efficient) return (start..end).map { computeFibbonaciNumber(it) }
+    if (start > end) return listOf()
+    if (start == end) return listOf(computeFibbonaciNumber(start))
+    val output = mutableListOf(computeFibbonaciNumber(start), computeFibbonaciNumber(start + 1))
+    (2..(end-start)).forEach { output.add(output[it-2] + output[it-1]) }
+    return output
+}
